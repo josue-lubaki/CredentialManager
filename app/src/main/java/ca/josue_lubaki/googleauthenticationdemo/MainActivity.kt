@@ -19,6 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import ca.josue_lubaki.googleauthenticationdemo.navigation.ScreenTarget
+import ca.josue_lubaki.googleauthenticationdemo.presentation.profile.ProfileScreen
+import ca.josue_lubaki.googleauthenticationdemo.presentation.profile.ProfileViewModel
+import ca.josue_lubaki.googleauthenticationdemo.presentation.sign_in.GoogleUserData
+import ca.josue_lubaki.googleauthenticationdemo.presentation.sign_in.SignInScreen
+import ca.josue_lubaki.googleauthenticationdemo.presentation.sign_in.SignInViewModel
 import ca.josue_lubaki.googleauthenticationdemo.ui.theme.GoogleAuthenticationDemoTheme
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -28,6 +41,13 @@ import java.security.MessageDigest
 import java.util.UUID
 
 class MainActivity : ComponentActivity() {
+
+    private val signInViewModel by lazy {
+        SignInViewModel(
+            context = this
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -41,7 +61,41 @@ class MainActivity : ComponentActivity() {
                        verticalArrangement = Arrangement.Center,
                        horizontalAlignment = Alignment.CenterHorizontally
                    ){
-                       GoogleSignInButton()
+                       val navController = rememberNavController()
+                       
+                       NavHost(navController = navController, startDestination = ScreenTarget.SignIn.route ){
+                           composable(ScreenTarget.SignIn.route) {
+                               SignInScreen(
+                                   viewModel = signInViewModel,
+                                   onNavigateToProfile = {
+                                       navController.navigate(
+                                           ScreenTarget.Profile.createRoute(
+                                               id = it.id,
+                                               name = it.name,
+                                           )
+                                       )
+                                   }
+                               )
+                           }
+
+                           composable(
+                               route = ScreenTarget.Profile.route,
+                               arguments = listOf(
+                                   navArgument("id") { type = NavType.StringType },
+                                   navArgument("name") { type = NavType.StringType },
+                               )
+                           ) {
+                               val viewModel : ProfileViewModel = viewModel<ProfileViewModel>()
+                               val user = GoogleUserData(
+                                   id = it.arguments?.getString("id"),
+                                   name = it.arguments?.getString("name")
+                               )
+                               ProfileScreen(
+                                   viewModel = viewModel,
+                                   user = user
+                               )
+                           }
+                       }
                    }
                 }
             }
