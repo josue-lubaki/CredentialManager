@@ -1,8 +1,17 @@
 package ca.josue_lubaki.googleauthenticationdemo.presentation.sign_in
 
-data class SignInState(
+import ca.josue_lubaki.google_auth.model.GoogleUser
+
+/**
+ * created by Josue Lubaki
+ * date : 2024-02-26
+ * version : 1.0.0
+ */
+
+data class SignInState (
+    val isSignedIn : Boolean = false,
     val isLoading: Boolean = false,
-    val isSignedIn: Boolean = false,
     val error: String? = null,
-    val data : GoogleUserData = GoogleUserData()
+    val user : GoogleUser? = null,
+    val token : String? = null
 )
