@@ -19,6 +19,9 @@ dependencyResolutionManagement {
     }
 }
 
+// Allow to use "implementation(project.common)" instead of "implementation(project(":common"))
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "GoogleAuthenticationDemo"
 include(":app")
- 
+include(":google_auth")

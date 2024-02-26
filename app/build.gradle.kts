@@ -1,3 +1,7 @@
+import com.android.build.api.variant.BuildConfigField
+import java.util.Properties
+
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -50,6 +54,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.googleAuth)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -67,11 +72,24 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.credentials:credentials:1.3.0-alpha01")
+    implementation(libs.androidx.credentials)
 
     // optional - needed for credentials support from play services, for devices running
     // Android 13 and below.
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
+    implementation(libs.androidx.credentials.play.services.auth)
 
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+    implementation(libs.googleid)
+
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+
+    // coil image
+    implementation(libs.coil.compose)
+
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    // datastore
+    implementation(libs.datastore)
 }
