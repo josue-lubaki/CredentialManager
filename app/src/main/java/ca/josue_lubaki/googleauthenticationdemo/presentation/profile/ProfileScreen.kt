@@ -68,11 +68,13 @@ fun ProfileScreen(
             }
             else if (targetState.isLoading) { CircularProgressIndicator() }
             else {
-                ProfileContent(
-                    user = targetState.user!!,
-                    onNavigateToWebsite = onNavigateToWebsite,
-                    onSignOut = onSignOut
-                )
+                targetState.user?.let {
+                    ProfileContent(
+                        user = it,
+                        onNavigateToWebsite = onNavigateToWebsite,
+                        onSignOut = onSignOut
+                    )
+                }
             }
         }
     }

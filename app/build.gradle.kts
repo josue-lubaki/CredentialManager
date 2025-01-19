@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "ca.josue_lubaki.googleauthenticationdemo"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ca.josue_lubaki.googleauthenticationdemo"
